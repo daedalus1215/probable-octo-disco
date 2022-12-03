@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/sam-app/HelloWorldFunction/HelloWorld.iml" filepath="$PROJECT_DIR$/sam-app/HelloWorldFunction/HelloWorld.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/aws_lambda.iml" filepath="$PROJECT_DIR$/.idea/aws_lambda.iml" />
+    </modules>
+  </component>
+</project>
