@@ -5,9 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="249b3172-f3a6-4d65-87a0-ee75f503c35b" name="Changes" comment="Add CreateOrderLambda">
-      <change afterPath="$PROJECT_DIR$/src/main/java/ReadOrdersLambda.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/samconfig.toml" beforeDir="false" afterPath="$PROJECT_DIR$/samconfig.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/template.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/template.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/CreateOrderLambda.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/CreateOrderLambda.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -146,7 +145,7 @@
       <workItem from="1682345857090" duration="4730000" />
       <workItem from="1682364051209" duration="9000" />
       <workItem from="1682364068418" duration="15000" />
-      <workItem from="1682364514053" duration="3381000" />
+      <workItem from="1682364514053" duration="4337000" />
     </task>
     <task id="LOCAL-00001" summary="tie up with maven">
       <created>1682361239637</created>
