@@ -23,8 +23,7 @@ Resources:
   CreateOrderFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: ordersapi
-      Handler: helloworld.CreateOrLambda::createOrder
+      Handler: CreateOrderLambda::createOrder
       Policies:
         - DynamoDBCrudPolicy:
             TableName: !Ref OrdersTable
@@ -34,17 +33,17 @@ Resources:
           Properties:
             Path: /orders
             Method: POST
-  ReadOrdersFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: ordersapi
-      Handler: helloworld.ReadOrdersLambda::getOrders
-      Policies:
-        - DynamoDBReadPolicy:
-            TableName: !Ref OrdersTable
-      Events:
-        OrderEvents:
-          Type: Api
-          Properties:
-            Path: /orders
-            Method: GET
+#  ReadOrdersFunction:
+#    Type: AWS::Serverless::Function
+#    Properties:
+#      CodeUri: ordersapi
+#      Handler: ordersapi.ReadOrdersLambda::getOrders
+#      Policies:
+#        - DynamoDBReadPolicy:
+#            TableName: !Ref OrdersTable
+#      Events:
+#        OrderEvents:
+#          Type: Api
+#          Properties:
+#            Path: /orders
+#            Method: GET
