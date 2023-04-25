@@ -10,3 +10,4 @@ capabilities = "CAPABILITY_IAM"
 image_repositories = []
 resolve_s3 = true
 disable_rollback = true
+confirm_changeset = true
