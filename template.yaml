@@ -16,20 +16,15 @@ Globals:
         ORDERS_TABLE: !Ref OrdersTable
 
 Resources:
-  OrdersTable:
-    Type: AWS::Serverless::SimpleTable
+  PatientCheckoutBucket:
+    Type: AWS::S3::Bucket # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
-      PrimaryKey:
-        Name: id
-        Type: Number
-  CreateOrderLambda:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
-    Properties:
+      BucketName: !Sub ${AWS::StackName}-${AWS::Accountid}-${AWS::Region}
       CodeUri: HelloWorldFunction
-      Handler: helloworld.CreateOrderLambda::createOrder
+      Handler: helloworld.PatientCheckoutLambda::handler
       Policies:
-        - DynamoDBCrudPolicy:
-            TableName: !Ref OrdersTable
+        - S3ReadPolicy:
+            BucketName: !Sub ${AWS::StackName}-${AWS::Accountid}-${AWS::Region}
       Architectures:
         - x86_64
       Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
@@ -37,40 +32,8 @@ Resources:
           PARAM1: VALUE
           JAVA_TOOL_OPTIONS: -XX:+TieredCompilation -XX:TieredStopAtLevel=1 # More info about tiered compilation https://aws.amazon.com/blogs/compute/optimizing-aws-lambda-function-performance-for-java/
       Events:
-        HelloWorld:
-          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+        S3Event:
+          Type: S3 # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
-            Path: /orders
-            Method: post
-  ReadOrderLambda:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
-    Properties:
-      CodeUri: HelloWorldFunction
-      Handler: helloworld.ReadOrdersLambda::getOrders
-      Runtime: java11
-      Policies:
-        - DynamoDBReadPolicy:
-            TableName: !Ref OrdersTable
-      Architectures:
-        - x86_64
-      MemorySize: 512
-      Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
-        Variables:
-          PARAM1: VALUE
-          JAVA_TOOL_OPTIONS: -XX:+TieredCompilation -XX:TieredStopAtLevel=1 # More info about tiered compilation https://aws.amazon.com/blogs/compute/optimizing-aws-lambda-function-performance-for-java/
-      Events:
-        HelloWorld:
-          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
-          Properties:
-            Path: /orders
-            Method: get
-Outputs:
-  CreateOrdersAPI:
-    Description: "API Gateway endpointing url for create orders function"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/orders"
-  CreateOrderFunction:
-    Description: "Create Order Lambda Function ARN"
-    Value: !GetAtt CreateOrderFunction.Arn
-  CreateOrderFunctionIamRole:
-    Description: "Create Order Lambda Function IAM Role ARN"
-    Value: !GetAtt CreateOrderFunctionRole.Arn
+            Bucket: !Ref PatientCheckoutBucket
+            Event: s3:ObjectCreated:*
