@@ -20,7 +20,7 @@ public class CreateOrderLambda {
 
         PutItemOutcome putItemOutcome = ordersTable.putItem(new Item()
                 .withPrimaryKey("id", order.id)
-                .withString("itemId", order.itemName)
+                .withString("itemName", order.itemName)
                 .withInt("quantity", order.quantity));
 
         return new APIGatewayProxyResponseEvent().withBody(String.format("ordersapi.Order ID: %s", order.getId()));
