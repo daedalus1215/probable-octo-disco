@@ -13,10 +13,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ReadOrdersLambda {
-    final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final AmazonDynamoDB amazonDynamoDB = AmazonDynamoDBClientBuilder.defaultClient();
 
     public APIGatewayProxyResponseEvent getOrders(APIGatewayProxyRequestEvent requestEvent) throws JsonProcessingException {
-        AmazonDynamoDB amazonDynamoDB = AmazonDynamoDBClientBuilder.defaultClient();
         ScanResult scanResult = amazonDynamoDB.scan(new ScanRequest().withTableName(System.getenv("ORDERS_TABLE")));
         List<Order> orders = scanResult.getItems().stream()
                 .map(item -> new Order(
