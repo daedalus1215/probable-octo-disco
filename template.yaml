@@ -12,6 +12,8 @@ Globals:
     MemorySize: 512
     Timeout: 30
 Resources:
+  PatientCheckoutTopic:
+    Type: AWS::SNS::Topic
   PatientCheckoutBucket:
     Type: AWS::S3::Bucket
     Properties:
@@ -28,7 +30,7 @@ Resources:
         - x86_64
       Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
         Variables:
-          PARAM1: VALUE
+          PATIENT_CHECKOUT_TOPIC: !Ref PatientCheckoutTopic
           JAVA_TOOL_OPTIONS: -XX:+TieredCompilation -XX:TieredStopAtLevel=1 # More info about tiered compilation https://aws.amazon.com/blogs/compute/optimizing-aws-lambda-function-performance-for-java/
       Events:
         S3Event:
