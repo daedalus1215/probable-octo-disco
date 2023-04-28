@@ -11,20 +11,19 @@ Globals:
     Runtime: java11
     MemorySize: 512
     Timeout: 30
-    Environment:
-      Variables:
-        ORDERS_TABLE: !Ref OrdersTable
-
 Resources:
   PatientCheckoutBucket:
-    Type: AWS::S3::Bucket # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Sub ${AWS::StackName}-${AWS::Accountid}-${AWS::Region}
+      BucketName: !Sub ${AWS::StackName}-${AWS::AccountId}-${AWS::Region}
+  PatientCheckoutFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
       CodeUri: HelloWorldFunction
       Handler: helloworld.PatientCheckoutLambda::handler
       Policies:
         - S3ReadPolicy:
-            BucketName: !Sub ${AWS::StackName}-${AWS::Accountid}-${AWS::Region}
+            BucketName: !Sub ${AWS::StackName}-${AWS::AccountId}-${AWS::Region}
       Architectures:
         - x86_64
       Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
@@ -36,4 +35,4 @@ Resources:
           Type: S3 # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Bucket: !Ref PatientCheckoutBucket
-            Event: s3:ObjectCreated:*
+            Events: s3:ObjectCreated:*
