@@ -23,6 +23,7 @@ Resources:
   ErrorHandlingFunction:
     Type: AWS::Serverless::Function
     Properties:
+      CodeUri: HelloWorldFunction
       Handler: helloworld.ErrorHandler::handler
       Events:
         SNSEvent:

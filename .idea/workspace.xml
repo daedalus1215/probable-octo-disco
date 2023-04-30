@@ -6,6 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="612b97ac-e92a-4f44-9259-ba0af6b4e440" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/HelloWorld-1.0.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/HelloWorld-1.0.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/original-HelloWorld-1.0.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/original-HelloWorld-1.0.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/template.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/template.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -71,6 +74,44 @@
       <command value="mvn jar:jar" />
     </option>
   </component>
+  <component name="RunManager">
+    <configuration name="[Local] ErrorHandlingFunction" type="aws.lambda" factoryName="Local" temporary="true" nameIsGenerated="true">
+      <option name="credentialProviderId" value="profile:default" />
+      <option name="regionId" value="us-east-1" />
+      <option name="debugHost" value="localhost" />
+      <option name="architecture" />
+      <option name="environmentVariables">
+        <map />
+      </option>
+      <option name="handler" />
+      <option name="image" value="false" />
+      <option name="logicalFunctionName" value="ErrorHandlingFunction" />
+      <option name="memorySize" value="128" />
+      <option name="pathMappings">
+        <list />
+      </option>
+      <option name="platform" />
+      <option name="runtime" />
+      <option name="templateFile" value="$PROJECT_DIR$/template.yaml" />
+      <option name="timeout" value="300" />
+      <option name="useTemplate" value="true" />
+      <option name="input" />
+      <option name="inputIsFile" value="false" />
+      <sam>
+        <option name="additionalBuildArgs" />
+        <option name="additionalLocalArgs" />
+        <option name="buildInContainer" value="false" />
+        <option name="dockerNetwork" />
+        <option name="skipImagePull" value="false" />
+      </sam>
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="AWS Lambda.[Local] ErrorHandlingFunction" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -81,7 +122,7 @@
       <updated>1682471829398</updated>
       <workItem from="1682471830493" duration="14685000" />
       <workItem from="1682647502786" duration="2001000" />
-      <workItem from="1682818267063" duration="4915000" />
+      <workItem from="1682818267063" duration="5542000" />
     </task>
     <servers />
   </component>
