@@ -7,7 +7,6 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.amazonaws.services.sns.AmazonSNS;
 import com.amazonaws.services.sns.AmazonSNSClientBuilder;
-import com.amazonaws.services.sns.model.PublishResult;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -33,19 +32,23 @@ public class PatientCheckoutLambda {
                     .getObjectContent();
 
             try {
+                System.out.println("Reading data from S3");
                 List<PatientCheckoutEvent> patientCheckoutEvents = Arrays.asList(objectMapper.readValue(s3InputStream, PatientCheckoutEvent.class));
                 System.out.println(patientCheckoutEvents);
-                patientCheckoutEvents.forEach(patientCheckoutEvent -> {
-                    try {
-                        sns.publish(System.getenv("PATIENT_CHECKOUT_TOPIC"), objectMapper.writeValueAsString(patientCheckoutEvent));
-                    } catch (JsonProcessingException e) {
-                        throw new RuntimeException(e);
-                    }
-                });
+                publishMessageToSNS(patientCheckoutEvents);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+        });
+    }
 
+    private void publishMessageToSNS(List<PatientCheckoutEvent> patientCheckoutEvents) {
+        patientCheckoutEvents.forEach(patientCheckoutEvent -> {
+            try {
+                sns.publish(System.getenv("PATIENT_CHECKOUT_TOPIC"), objectMapper.writeValueAsString(patientCheckoutEvent));
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
         });
     }
 }
