@@ -12,6 +12,8 @@ Globals:
     MemorySize: 512
     Timeout: 30
 Resources:
+  PatientCheckoutDLQ:
+    Type: AWS::SNS::Topic
   PatientCheckoutTopic:
     Type: AWS::SNS::Topic
   PatientCheckoutBucket:
@@ -23,6 +25,9 @@ Resources:
     Properties:
       CodeUri: HelloWorldFunction
       Handler: helloworld.PatientCheckoutLambda::handler
+      DeadLetterQueue:
+        Type: SNS
+        TargetArn: !Ref PatientCheckoutDLQ
       Policies:
         - S3ReadPolicy:
             BucketName: !Sub ${AWS::StackName}-${AWS::AccountId}-${AWS::Region}
