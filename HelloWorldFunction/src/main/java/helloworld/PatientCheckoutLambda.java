@@ -1,6 +1,8 @@
 package helloworld;
 
 
+import com.amazonaws.services.lambda.runtime.Context;
+import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.events.S3Event;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
@@ -11,15 +13,20 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.List;
+
+import static java.util.Arrays.asList;
 
 public class PatientCheckoutLambda {
     private final AmazonS3 s3 = AmazonS3ClientBuilder.defaultClient();
     private final AmazonSNS sns = AmazonSNSClientBuilder.defaultClient();
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    public void handler(S3Event event) {
+    public void handler(S3Event event, Context context) {
+        final LambdaLogger logger = context.getLogger();
         event.getRecords().forEach(record -> {
             S3ObjectInputStream s3InputStream = s3.getObject(record
                                     .getS3()
@@ -32,22 +39,24 @@ public class PatientCheckoutLambda {
                     .getObjectContent();
 
             try {
-                System.out.println("Reading data from S3");
-                List<PatientCheckoutEvent> patientCheckoutEvents = Arrays.asList(objectMapper.readValue(s3InputStream, PatientCheckoutEvent.class));
-                System.out.println(patientCheckoutEvents);
-                publishMessageToSNS(patientCheckoutEvents);
+                logger.log("Reading data from S3");
+                List<PatientCheckoutEvent> patientCheckoutEvents = asList(objectMapper.readValue(s3InputStream, PatientCheckoutEvent.class));
+                logger.log(patientCheckoutEvents.toString());
+                publishMessageToSNS(patientCheckoutEvents, logger);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         });
     }
 
-    private void publishMessageToSNS(List<PatientCheckoutEvent> patientCheckoutEvents) {
+    private void publishMessageToSNS(List<PatientCheckoutEvent> patientCheckoutEvents, LambdaLogger logger) {
         patientCheckoutEvents.forEach(patientCheckoutEvent -> {
             try {
                 sns.publish(System.getenv("PATIENT_CHECKOUT_TOPIC"), objectMapper.writeValueAsString(patientCheckoutEvent));
             } catch (JsonProcessingException e) {
-                throw new RuntimeException(e);
+                final StringWriter stringWriter = new StringWriter();
+                e.printStackTrace(new PrintWriter(stringWriter));
+                logger.log(stringWriter.toString());
             }
         });
     }
