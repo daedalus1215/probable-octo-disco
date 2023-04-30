@@ -11,6 +11,8 @@ import com.amazonaws.services.sns.AmazonSNS;
 import com.amazonaws.services.sns.AmazonSNSClientBuilder;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -26,7 +28,8 @@ public class PatientCheckoutLambda {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public void handler(S3Event event, Context context) {
-        final LambdaLogger logger = context.getLogger();
+//        final LambdaLogger logger = context.getLogger();
+        final Logger logger = LoggerFactory.getLogger(PatientCheckoutLambda.class);
         event.getRecords().forEach(record -> {
             S3ObjectInputStream s3InputStream = s3.getObject(record
                                     .getS3()
@@ -39,9 +42,9 @@ public class PatientCheckoutLambda {
                     .getObjectContent();
 
             try {
-                logger.log("Reading data from S3");
+                logger.info("Reading data from S3");
                 List<PatientCheckoutEvent> patientCheckoutEvents = asList(objectMapper.readValue(s3InputStream, PatientCheckoutEvent.class));
-                logger.log(patientCheckoutEvents.toString());
+                logger.info(patientCheckoutEvents.toString());
                 publishMessageToSNS(patientCheckoutEvents, logger);
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -49,14 +52,14 @@ public class PatientCheckoutLambda {
         });
     }
 
-    private void publishMessageToSNS(List<PatientCheckoutEvent> patientCheckoutEvents, LambdaLogger logger) {
+    private void publishMessageToSNS(List<PatientCheckoutEvent> patientCheckoutEvents, Logger logger) {
         patientCheckoutEvents.forEach(patientCheckoutEvent -> {
             try {
                 sns.publish(System.getenv("PATIENT_CHECKOUT_TOPIC"), objectMapper.writeValueAsString(patientCheckoutEvent));
             } catch (JsonProcessingException e) {
                 final StringWriter stringWriter = new StringWriter();
                 e.printStackTrace(new PrintWriter(stringWriter));
-                logger.log(stringWriter.toString());
+                logger.error(stringWriter.toString());
             }
         });
     }
