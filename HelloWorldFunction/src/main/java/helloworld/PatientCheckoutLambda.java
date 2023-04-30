@@ -44,6 +44,7 @@ public class PatientCheckoutLambda {
             try {
                 logger.info("Reading data from S3");
                 List<PatientCheckoutEvent> patientCheckoutEvents = asList(objectMapper.readValue(s3InputStream, PatientCheckoutEvent.class));
+                s3InputStream.close();
                 logger.info(patientCheckoutEvents.toString());
                 publishMessageToSNS(patientCheckoutEvents, logger);
             } catch (IOException e) {
